@@ -79,6 +79,67 @@ var appCoding = new Vue({
       fb23preHeader: "",
     };
   },
+  computed: {
+    filtersActive: function () {
+      // Only category filters determine if we show two groups; type is handled inside matcher
+      return (
+        this.filters.sound ||
+        this.filters.infotainment ||
+        this.filters.doors_trunk ||
+        this.filters.navigation ||
+        this.filters.display ||
+        this.filters.service_diagnostic ||
+        this.filters.video ||
+        this.filters.control ||
+        this.filterType !== "all"
+      );
+    },
+    filteredPrimary: function () {
+      // First group: products matching the active category/type filters
+      var matched = [];
+      for (var i = 0; i < this.productList.length; i++) {
+        var p = this.productList[i];
+        if (this._productMatchesFilters(p)) {
+          matched.push(p);
+        }
+      }
+      return this._applySorting(matched);
+    },
+    filteredSecondary: function () {
+      // Second group: remaining showable products not matching selected filters
+      if (!this.filtersActive) {
+        return [];
+      }
+      var remain = [];
+      for (var i = 0; i < this.productList.length; i++) {
+        var p = this.productList[i];
+        if (!this._productMatchesFilters(p)) {
+          remain.push(p);
+        }
+      }
+      return this._applySorting(remain);
+    },
+    selectedHeading: function () {
+      // "Selected [type] products: Cat1 / Cat2 / Cat3"
+      var typeLabel = "";
+      if (this.filterType === "usb") typeLabel = "USB ";
+      if (this.filterType === "cable") typeLabel = "Cable ";
+      var categories = [];
+      var pretty = this._prettyCategoryLabel;
+      for (var key in this.filters) {
+        if (this.filters[key]) categories.push(pretty(key));
+      }
+      var cats = categories.length ? categories.join(" / ") : "All";
+      return "Selected " + (typeLabel ? typeLabel : "") + "products: " + cats;
+    },
+    detailProduct: function () {
+      if (!this.showDetails) return null;
+      for (var i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].id == this.showDetails) return this.productList[i];
+      }
+      return null;
+    },
+  },
   mounted() {
     var that = this;
     this.loadStartUp();
@@ -135,6 +196,104 @@ var appCoding = new Vue({
     }
   },
   methods: {
+    _prettyCategoryLabel: function (key) {
+      var map = {
+        sound: "Sound",
+        infotainment: "Infotainment",
+        doors_trunk: "Doors & Trunk",
+        navigation: "Navigation",
+        display: "Display",
+        service_diagnostic: "Service & Diagnostic",
+        video: "Video",
+        control: "Control",
+      };
+      return map[key] || key;
+    },
+    _productMatchesFilters: function (product) {
+      // Type filter
+      if (this.filterType === "usb" && product.cable) return false;
+      if (this.filterType === "cable" && !product.cable) return false;
+      // Category filters: if none selected, everything matches
+      var anyCategorySelected =
+        this.filters.sound ||
+        this.filters.infotainment ||
+        this.filters.doors_trunk ||
+        this.filters.navigation ||
+        this.filters.display ||
+        this.filters.service_diagnostic ||
+        this.filters.video ||
+        this.filters.control;
+      if (!anyCategorySelected) return true;
+      if (!product["filters"]) return false;
+      if (this.filters.sound && product.filters.sound) return true;
+      if (this.filters.infotainment && product.filters.infotainment) return true;
+      if (this.filters.doors_trunk && product.filters.doors_trunk) return true;
+      if (this.filters.navigation && product.filters.navigation) return true;
+      if (this.filters.display && product.filters.display) return true;
+      if (
+        this.filters.service_diagnostic &&
+        product.filters.service_diagnostic
+      )
+        return true;
+      if (this.filters.video && product.filters.video) return true;
+      if (this.filters.control && product.filters.control) return true;
+      return false;
+    },
+    _applySorting: function (arr) {
+      var list = arr.slice(0);
+      if (this.sort === "asc") {
+        list.sort(function (a, b) {
+          return parseFloat(a.price) - parseFloat(b.price);
+        });
+      } else if (this.sort === "desc") {
+        list.sort(function (a, b) {
+          return parseFloat(b.price) - parseFloat(a.price);
+        });
+      }
+      return list;
+    },
+    _resolveIcon: function (icon) {
+      if (!icon) return "";
+      // If it looks like a full/relative path, use as-is
+      if (icon.indexOf("/") !== -1 || icon.indexOf("http") === 0) return icon;
+      // If it looks like a file name, assume assets/img/icons/
+      if (icon.match(/\.(svg|png|jpg|jpeg|gif)$/i)) {
+        return "assets/img/icons/" + icon;
+      }
+      return ""; // otherwise treat as CSS class elsewhere
+    },
+    quickFilterCategory: function (categoryKey) {
+      var valid = [
+        "sound",
+        "infotainment",
+        "doors_trunk",
+        "navigation",
+        "display",
+        "service_diagnostic",
+        "video",
+        "control",
+      ];
+      if (valid.indexOf(categoryKey) === -1) {
+        return;
+      }
+      // Reset all categories and set only the chosen one
+      for (var i = 0; i < valid.length; i++) {
+        this.filters[valid[i]] = false;
+      }
+      this.filters[categoryKey] = true;
+      // Keep current type selection as per spec (or could reset to 'all')
+      if (this.vinSet) {
+        this.filterVin("scroll");
+      } else {
+        this.filterNonVin();
+      }
+      var el = document.getElementById("category-filter");
+      if (el) {
+        setTimeout(function () {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 0);
+      }
+    },
     scrollToId: function (id) {
       var header = 70;
       setTimeout(function () {
@@ -1783,6 +1942,11 @@ Vue.filter("priceFormat", function (value) {
   } else {
     return parseFloat(value).toFixed(2);
   }
+});
+Vue.filter("priceUi", function (value) {
+  if (!value && value !== 0) return "$0.-";
+  var num = parseFloat(value).toFixed(0);
+  return num + ".-";
 });
 setTimeout(function () {
   AOS.init({ once: true });

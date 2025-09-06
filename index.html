@@ -9,12 +9,141 @@
   <!-- Toastr CSS -->
   <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css">
   <!-- Add your custom CSS here -->
+  <link rel="stylesheet" href="assets/styles/idrive.css">
 </head>
 <body>
   <div id="app">
-    <!-- Vue app will mount here -->
-    <h1>BMW iDrive Coding</h1>
-    <!-- Add your app UI here -->
+    <section id="category-filter">
+      <h2>Check your coding options</h2>
+      <div class="filters">
+        <div class="categories">
+          <span>Categories:</span>
+          <button @click="productFilter('sound')" :class="{active: filters.sound}">Sound</button>
+          <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">Infotainment</button>
+          <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">Doors & Trunk</button>
+          <button @click="productFilter('navigation')" :class="{active: filters.navigation}">Navigation</button>
+          <button @click="productFilter('display')" :class="{active: filters.display}">Display</button>
+          <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service & Diagnostic</button>
+          <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
+          <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
+        </div>
+        <div class="types">
+          <span>Type:</span>
+          <button @click="productFilterType('all')" :class="{active: filterType==='all'}">All</button>
+          <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">USB</button>
+          <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">Cable</button>
+        </div>
+        <div class="sorting">
+          <label>Sort by</label>
+          <select v-model="sort" @change="sortMethod(sort)">
+            <option value="Default">Default</option>
+            <option value="desc">Price (high to low)</option>
+            <option value="asc">Price (low to high)</option>
+          </select>
+        </div>
+      </div>
+
+      <div v-if="filtersActive" class="grid-group">
+        <h3>{{ selectedHeading }}</h3>
+        <div class="grid">
+          <div class="card card-product" v-for="p in filteredPrimary" :key="p.id">
+            <div class="card-top">
+              <div class="left">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <div class="title">{{ p.name }}</div>
+              </div>
+              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+            </div>
+            <div class="card-body">
+              <p class="small">{{ p.smallDescription }}</p>
+              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <div class="bottom">
+                <div class="price-block">
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
+                  <div class="now">${{ p.price | priceUi }}</div>
+                </div>
+                <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
+                <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="filtersActive && filteredSecondary.length" class="grid-group">
+        <h3>Other coding options</h3>
+        <div class="grid">
+          <div class="card card-product" v-for="p in filteredSecondary" :key="p.id">
+            <div class="card-top">
+              <div class="left">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <div class="title">{{ p.name }}</div>
+              </div>
+              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+            </div>
+            <div class="card-body">
+              <p class="small">{{ p.smallDescription }}</p>
+              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <div class="bottom">
+                <div class="price-block">
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
+                  <div class="now">${{ p.price | priceUi }}</div>
+                </div>
+                <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
+                <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="!filtersActive" class="grid">
+        <div class="card card-product" v-for="p in _applySorting(productList)" :key="p.id">
+          <div class="card-top">
+            <div class="left">
+              <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+              <div class="title">{{ p.name }}</div>
+            </div>
+            <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+          </div>
+          <div class="card-body">
+            <p class="small">{{ p.smallDescription }}</p>
+            <button class="link" @click="showMore(p.id)">learn more →</button>
+            <div class="bottom">
+              <div class="price-block">
+                <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
+                <div class="now">${{ p.price | priceUi }}</div>
+              </div>
+              <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
+              <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div v-if="detailProduct" class="modal-backdrop" @click.self="showDetails=''">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="badge">{{ detailProduct.cable ? 'Cable' : 'USB' }}</div>
+          <div class="title">{{ detailProduct.name }}</div>
+          <button class="close" @click="showDetails=''">×</button>
+        </div>
+        <div class="modal-body">
+          <div v-if="detailProduct.video" class="media">
+            <iframe :src="detailProduct.video" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <div v-else-if="detailProduct.image" class="media">
+            <img :src="detailProduct.image" alt="" />
+          </div>
+          <p v-html="detailProduct.description"></p>
+        </div>
+        <div class="modal-actions">
+          <button v-if="!detailProduct.selected" @click="selectProduct(detailProduct.id)">+ Select</button>
+          <button v-else @click="selectProduct(detailProduct.id)">Remove</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Vue.js (Vue 2) -->
