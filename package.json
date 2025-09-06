@@ -1,0 +1,25 @@
+{
+  "name": "bmw-idrive-coding",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "aos": "^2.3.4",
+    "axios": "^1.11.0",
+    "jquery": "^3.7.1",
+    "moment": "^2.30.1",
+    "toastr": "^2.1.4",
+    "vue": "^2.7.14",
+    "vue-router": "^3.6.5"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
