@@ -16,31 +16,35 @@
     <section id="category-filter">
       <h2>Check your coding options</h2>
       <div class="filters">
-        <div class="categories">
-          <span>Categories:</span>
-          <button @click="productFilter('sound')" :class="{active: filters.sound}">Sound</button>
-          <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">Infotainment</button>
-          <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">Doors & Trunk</button>
-          <button @click="productFilter('navigation')" :class="{active: filters.navigation}">Navigation</button>
-          <button @click="productFilter('display')" :class="{active: filters.display}">Display</button>
-          <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service & Diagnostic</button>
-          <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
-          <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
+        <div class="filters-row">
+          <div class="categories">
+            <span>Categories:</span>
+            <button @click="productFilter('sound')" :class="{active: filters.sound}">Sound</button>
+            <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">Infotainment</button>
+            <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">Doors & Trunk</button>
+            <button @click="productFilter('navigation')" :class="{active: filters.navigation}">Navigation</button>
+            <button @click="productFilter('display')" :class="{active: filters.display}">Display</button>
+            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service & Diagnostic</button>
+            <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
+            <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
+          </div>
           <button class="clear-filters" @click="productFilter()">Clear filters</button>
         </div>
-        <div class="types">
-          <span>Type:</span>
-          <button @click="productFilterType('all')" :class="{active: filterType==='all'}">All</button>
-          <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">USB</button>
-          <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">Cable</button>
-        </div>
-        <div class="sorting">
-          <label>Sort by</label>
-          <select v-model="sort" @change="sortMethod(sort)">
-            <option value="Default">Default</option>
-            <option value="desc">Price (high to low)</option>
-            <option value="asc">Price (low to high)</option>
-          </select>
+        <div class="filters-row">
+          <div class="types">
+            <span>Type:</span>
+            <button @click="productFilterType('all')" :class="{active: filterType==='all'}">All</button>
+            <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">USB</button>
+            <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">Cable</button>
+          </div>
+          <div class="sorting">
+            <label>Sort by Default</label>
+            <select v-model="sort" @change="sortMethod(sort)">
+              <option value="Default">Default</option>
+              <option value="desc">Price (high to low)</option>
+              <option value="asc">Price (low to high)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -63,8 +67,8 @@
                   <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
-                <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
-                <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
               </div>
             </div>
           </div>
@@ -90,8 +94,8 @@
                   <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
-                <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
-                <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
               </div>
             </div>
           </div>
@@ -115,8 +119,8 @@
                 <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
                 <div class="now">${{ p.price | priceUi }}</div>
               </div>
-              <button v-if="!p.selected" class="btn btn-select" @click="selectProduct(p.id)">+ Select</button>
-              <button v-else class="btn btn-remove" @click="selectProduct(p.id)">Remove</button>
+              <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
+              <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
             </div>
           </div>
         </div>
@@ -125,23 +129,45 @@
 
     <div v-if="detailProduct" class="modal-backdrop" @click.self="showDetails=''">
       <div class="modal">
-        <div class="modal-header">
-          <div class="badge">{{ detailProduct.cable ? 'Cable' : 'USB' }}</div>
-          <div class="title">{{ detailProduct.name }}</div>
+        <div class="modal-header modal-header--product">
+          <div class="modal-badge">{{ detailProduct.cable ? 'Cable' : 'USB' }}</div>
+          <div class="modal-head-main">
+            <img src="assets/img/icons/picon.svg" alt="" class="modal-icon">
+            <div class="modal-title">{{ detailProduct.name }}</div>
+          </div>
+          <div class="modal-head-cta">
+            <div class="modal-price">
+              <span v-if="detailProduct.originalPrice && detailProduct.originalPrice>detailProduct.price" class="orig">${{ detailProduct.originalPrice | priceFormat }}</span>
+              <span class="now">${{ detailProduct.price | priceUi }}</span>
+            </div>
+            <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
+            <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
+          </div>
           <button class="close" @click="showDetails=''">×</button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-body--product">
           <div v-if="detailProduct.video" class="media">
             <iframe :src="detailProduct.video" frameborder="0" allowfullscreen></iframe>
           </div>
           <div v-else-if="detailProduct.image" class="media">
             <img :src="detailProduct.image" alt="" />
           </div>
+
+          <div v-if="detailProduct.dropdown && detailProduct.dropdown.length" class="modal-options">
+            <div class="modal-option" v-for="dd in detailProduct.dropdown" :key="dd.id">
+              <label class="modal-option__label">{{ dd.name }}</label>
+              <select class="modal-option__select" v-model="dd.selectedOption" @change="productOptSelectionPrice(detailProduct.id)">
+                <option v-for="opt in dd.options" :key="opt.id" :value="opt.id">
+                  {{ opt.name }}<span v-if="opt.price"> (+${{ (opt.price/100).toFixed(2) }})</span>
+                </option>
+              </select>
+            </div>
+          </div>
           <p v-html="detailProduct.description"></p>
         </div>
-        <div class="modal-actions">
-          <button v-if="!detailProduct.selected" @click="selectProduct(detailProduct.id)">+ Select</button>
-          <button v-else @click="selectProduct(detailProduct.id)">Remove</button>
+        <div class="modal-actions modal-actions--product">
+          <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
+          <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
         </div>
       </div>
     </div>

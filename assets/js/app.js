@@ -744,7 +744,8 @@ var appCoding = new Vue({
       var that = this;
       var index = "";
       var revertFilter = [];
-      if (that.vinSet && that.vin.length > 4) {
+      // VIN gating removed – allow add/remove without VIN
+      if (true) {
         that.productLoading = true;
         that.productLoadingId = id;
         if (
@@ -1209,6 +1210,30 @@ var appCoding = new Vue({
         }, 100);
       } else {
         this.showDetails = id;
+        // If product requires custom dropdowns and they are not loaded yet, fetch them
+        var that = this;
+        for (var i = 0; i < that.productList.length; i++) {
+          if (that.productList[i].id == id) {
+            if (that.productList[i].custom && !that.productList[i].dropdown) {
+              if (that.productList[i].shopId) {
+                axios
+                  .get(that.preUrl + "/api2/product/" + that.productList[i].shopId, {
+                    headers: { "Access-Control-Allow-Origin": "*" },
+                  })
+                  .then(function (response) {
+                    if (response && response.data && response.data.dropDown) {
+                      that.productList[i].variantId = response.data.code;
+                      that.productList[i].dropdown = response.data.dropDown;
+                    }
+                  })
+                  .catch(function (error) {
+                    if (that.debugMode) console.log(error);
+                  });
+              }
+            }
+            break;
+          }
+        }
         //                var elmnt = document.getElementById(id);elmnt.scrollIntoView();
 
         setTimeout(function () {
