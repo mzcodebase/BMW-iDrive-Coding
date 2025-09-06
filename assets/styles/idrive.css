@@ -55,6 +55,8 @@ body {
   padding: 6px 10px;
   border-radius: 6px;
 }
+.clear-filters{background:transparent;border:0;color:#cfe1de;cursor:pointer;margin-left:8px;text-decoration:underline}
+.clear-filters:hover{color:#ffffff}
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -26,6 +26,7 @@
           <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service & Diagnostic</button>
           <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
           <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
+          <button class="clear-filters" @click="productFilter()">Clear filters</button>
         </div>
         <div class="types">
           <span>Type:</span>
