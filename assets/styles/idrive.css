@@ -457,3 +457,73 @@ body {
   cursor: pointer;
   clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
 }
+
+/* SVG button base */
+.svg-btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 120px;    /* tweak as needed */
+  height: 42px;        /* matches your previous min-height */
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* make the svg fill the button box */
+.svg-btn svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* shared text styles inside SVG */
+.svg-btn text {
+  font-family: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-size: 12.5px;   /* tweak to match your UI */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* shared polygon shape base */
+.svg-btn .btn-shape {
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+/* Gradient (Select) */
+.svg-btn--gradient .btn-shape {
+  fill: url(#btn-gradient);
+  stroke: none;
+}
+.svg-btn--gradient text {
+  fill: #ffffff;           /* white label on gradient */
+  text-shadow: 0 0 1px rgba(0,0,0,0.25);
+}
+
+/* Outline (Remove) */
+.svg-btn--outline .btn-shape {
+  fill: transparent;
+  stroke: #3bb8b1;        /* matches your previous outline color */
+}
+.svg-btn--outline text {
+  fill: #e9f1ef;          /* matches existing UI text color */
+}
+
+/* Hover / active affordances (small tweaks) */
+.svg-btn--gradient:hover .btn-shape { filter: brightness(0.95); }
+.svg-btn--outline:hover .btn-shape  { opacity: 0.95; }
+
+/* Disable state */
+.svg-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Make sure placement inside .bottom behaves same as before */
+.bottom .svg-btn { /* adapt sizing for your layout */
+  min-width: 140px;
+  height: 42px;
+}

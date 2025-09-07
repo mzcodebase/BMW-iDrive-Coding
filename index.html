@@ -2,42 +2,74 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>BMW iDrive Coding</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- AOS CSS -->
-  <link rel="stylesheet" href="node_modules/aos/dist/aos.css">
+  <link rel="stylesheet" href="node_modules/aos/dist/aos.css" />
   <!-- Toastr CSS -->
-  <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css">
+  <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css" />
   <!-- Add your custom CSS here -->
-  <link rel="stylesheet" href="assets/styles/idrive.css">
+  <link rel="stylesheet" href="assets/styles/idrive.css" />
 </head>
 
 <body>
   <div id="app">
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <linearGradient id="btn-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#267778" />
+          <stop offset="100%" stop-color="#2cc3bb" />
+        </linearGradient>
+      </defs>
+    </svg>
+
     <section id="category-filter">
       <div class="filters">
         <div class="filters-row">
           <div class="categories">
             <span>Categories:</span>
-            <button @click="productFilter('sound')" :class="{active: filters.sound}">Sound</button>
-            <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">Infotainment</button>
-            <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">Doors & Trunk</button>
-            <button @click="productFilter('navigation')" :class="{active: filters.navigation}">Navigation</button>
-            <button @click="productFilter('display')" :class="{active: filters.display}">Display</button>
-            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service &
-              Diagnostic</button>
-            <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
-            <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
+            <button @click="productFilter('sound')" :class="{active: filters.sound}">
+              Sound
+            </button>
+            <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">
+              Infotainment
+            </button>
+            <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">
+              Doors & Trunk
+            </button>
+            <button @click="productFilter('navigation')" :class="{active: filters.navigation}">
+              Navigation
+            </button>
+            <button @click="productFilter('display')" :class="{active: filters.display}">
+              Display
+            </button>
+            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">
+              Service & Diagnostic
+            </button>
+            <button @click="productFilter('video')" :class="{active: filters.video}">
+              Video
+            </button>
+            <button @click="productFilter('control')" :class="{active: filters.control}">
+              Control
+            </button>
           </div>
-          <button class="clear-filters" @click="productFilter()">Clear filters</button>
+          <button class="clear-filters" @click="productFilter()">
+            Clear filters
+          </button>
         </div>
         <div class="filters-row">
           <div class="types">
             <span>Type:</span>
-            <button @click="productFilterType('all')" :class="{active: filterType==='all'}">All</button>
-            <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">USB</button>
-            <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">Cable</button>
+            <button @click="productFilterType('all')" :class="{active: filterType==='all'}">
+              All
+            </button>
+            <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">
+              USB
+            </button>
+            <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">
+              Cable
+            </button>
           </div>
           <div class="sorting">
             <label>Sort by Default</label>
@@ -56,24 +88,32 @@
           <div class="card card-product" v-for="p in filteredPrimary" :key="p.id">
             <div class="card-top">
               <div class="left">
-                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
                 <div class="title">{{ p.name }}</div>
               </div>
-              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
+                {{ p.cable ? 'Cable' : 'USB' }}
+              </div>
             </div>
             <div class="card-body">
               <p class="small">{{ p.smallDescription }}</p>
-              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <button class="link" @click="showMore(p.id)">
+                learn more →
+              </button>
               <div class="bottom">
                 <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat
-                    }}</div>
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
+                    ${{ p.originalPrice | priceFormat }}
+                  </div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
                 <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
-                  @click="selectProduct(p.id)"><span>+ Select</span></button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline"
-                  @click="selectProduct(p.id)"><span>Remove</span></button>
+                  @click="selectProduct(p.id)">
+                  <span>+ Select</span>
+                </button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
+                  <span>Remove</span>
+                </button>
               </div>
             </div>
           </div>
@@ -86,24 +126,32 @@
           <div class="card card-product" v-for="p in filteredSecondary" :key="p.id">
             <div class="card-top">
               <div class="left">
-                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
                 <div class="title">{{ p.name }}</div>
               </div>
-              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
+                {{ p.cable ? 'Cable' : 'USB' }}
+              </div>
             </div>
             <div class="card-body">
               <p class="small">{{ p.smallDescription }}</p>
-              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <button class="link" @click="showMore(p.id)">
+                learn more →
+              </button>
               <div class="bottom">
                 <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat
-                    }}</div>
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
+                    ${{ p.originalPrice | priceFormat }}
+                  </div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
                 <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
-                  @click="selectProduct(p.id)"><span>+ Select</span></button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline"
-                  @click="selectProduct(p.id)"><span>Remove</span></button>
+                  @click="selectProduct(p.id)">
+                  <span>+ Select</span>
+                </button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
+                  <span>Remove</span>
+                </button>
               </div>
             </div>
           </div>
@@ -124,7 +172,7 @@
             <!-- Top Row -->
             <div class="card-top">
               <div class="left">
-                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
                 <div class="title">{{ p.name }}</div>
               </div>
               <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
@@ -135,40 +183,49 @@
             <!-- Body -->
             <div class="card-body">
               <p class="small">{{ p.smallDescription }}</p>
-              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <button class="link" @click="showMore(p.id)">
+                learn more →
+              </button>
               <div class="bottom">
                 <div class="price-block">
                   <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
                     ${{ p.originalPrice | priceFormat }}
                   </div>
-                  <div class="now">
-                    ${{ p.price | priceUi }}
-                  </div>
+                  <div class="now">${{ p.price | priceUi }}</div>
                 </div>
 
-                <!-- Buttons -->
-                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
-                  @click="selectProduct(p.id)">
-                  <span>+ Select</span>
+                <button v-if="!p.selected" class="svg-btn svg-btn--gradient" @click="selectProduct(p.id)"
+                  :aria-label="`Select ${p.name}`">
+                  <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                    <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+                  </svg>
                 </button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
-                  <span>Remove</span>
+
+                <!-- Remove -->
+                <button v-else class="svg-btn svg-btn--outline" @click="selectProduct(p.id)"
+                  :aria-label="`Remove ${p.name}`">
+                  <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                    <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
+                  </svg>
                 </button>
+
               </div>
             </div>
           </div>
         </div>
-
-
       </div>
     </section>
 
     <div v-if="detailProduct" class="modal-backdrop" @click.self="showDetails=''">
       <div class="modal">
         <div class="modal-header modal-header--product">
-          <div class="modal-badge">{{ detailProduct.cable ? 'Cable' : 'USB' }}</div>
+          <div class="modal-badge">
+            {{ detailProduct.cable ? 'Cable' : 'USB' }}
+          </div>
           <div class="modal-head-main">
-            <img src="assets/img/icons/picon.svg" alt="" class="modal-icon">
+            <img src="assets/img/icons/picon.svg" alt="" class="modal-icon" />
             <div class="modal-title">{{ detailProduct.name }}</div>
           </div>
           <div class="modal-head-cta">
@@ -178,9 +235,13 @@
               <span class="now">${{ detailProduct.price | priceUi }}</span>
             </div>
             <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
-              @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
+              @click="selectProduct(detailProduct.id)">
+              <span>+ Select</span>
+            </button>
             <button v-else class="parallelogram-btn parallelogram-btn--outline"
-              @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
+              @click="selectProduct(detailProduct.id)">
+              <span>Remove</span>
+            </button>
           </div>
           <button class="close" @click="showDetails=''">×</button>
         </div>
@@ -198,7 +259,8 @@
               <select class="modal-option__select" v-model="dd.selectedOption"
                 @change="productOptSelectionPrice(detailProduct.id)">
                 <option v-for="opt in dd.options" :key="opt.id" :value="opt.id">
-                  {{ opt.name }}<span v-if="opt.price"> (+${{ (opt.price/100).toFixed(2) }})</span>
+                  {{ opt.name }}<span v-if="opt.price">
+                    (+${{ (opt.price/100).toFixed(2) }})</span>
                 </option>
               </select>
             </div>
@@ -207,9 +269,12 @@
         </div>
         <div class="modal-actions modal-actions--product">
           <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
-            @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
-          <button v-else class="parallelogram-btn parallelogram-btn--outline"
-            @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
+            @click="selectProduct(detailProduct.id)">
+            <span>+ Select</span>
+          </button>
+          <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)">
+            <span>Remove</span>
+          </button>
         </div>
       </div>
     </div>
