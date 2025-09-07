@@ -1257,101 +1257,25 @@ var appCoding = new Vue({
       }
       if (that.acceptTerms) {
         if (that.minimumAmount <= that.cartTotal) {
-          that.loading = true;
-          if (that.includeCable) {
-            that.cartTotal = that.cartTotal + 49;
-            that.cartProducts.push({
-              productId: 165,
-              variantId: 165,
-              productName: "49 Cable",
-              productPrice: 49,
-              productIdName: "49-cable",
-              warranty: 0,
-              savePrice: 0,
-              isCable: 1,
-            });
-          }
-          if (that.addedWifi) {
-            that.cartProducts.push({
-              productId: "wifi",
-              variantId: "wifi",
-              productName: "Wifi Antena",
-              productPrice: 99,
-              productIdName: "wifi-antena",
-              warranty: 0,
-              savePrice: 0,
-              isCable: 0,
-            });
-          }
-          if (that.includeEthAdapter.added) {
-            that.cartTotal = that.cartTotal + that.includeEthAdapter.price;
-            var ethId = 1215;
-            if (that.includeEthAdapter.type == "A") {
-              ethId = 305;
+          // Show pending functionality message instead of actual checkout
+          toastr.remove();
+          toastr.info(
+            "🚧 Checkout functionality is currently under development. Your cart items have been saved and will be processed soon!",
+            "Feature Coming Soon",
+            {
+              timeOut: 5000,
+              extendedTimeOut: 2000
             }
-            if (that.includeEthAdapter.type == "C") {
-              ethId = 306;
-            }
-            that.cartProducts.push({
-              productId: "Ethernet_adapter",
-              variantId: "Ethernet_adapter",
-              productName:
-                that.includeEthAdapter.price +
-                " Ethernet adapter + USB Type " +
-                that.includeEthAdapter.type,
-              productPrice: that.includeEthAdapter.price,
-              productIdName: "1215-cable",
-              warranty: 0,
-              savePrice: 0,
-              isCable: 1,
-              dropDown: [ethId],
-            });
-          }
-          let data = {
-            data: that.cartProducts,
-            from: "idrive",
-            cartId: that.cartId,
-          };
-          axios
-            .post(that.preUrl + "/api2/cart/add", data)
-            .then(function (responseData) {
-              let response = responseData.data;
-              if (response.cart_id) {
-                var vinParam = that.fullVin;
-                if (that.fullVin != that.vin) {
-                  vinParam = that.fullVin.substr(that.fullVin.length - 7);
-                }
-                const url =
-                  that.preUrl +
-                  "/cart?cartId=" +
-                  response.cart_id +
-                  "&from=idrive&vin=" +
-                  vinParam +
-                  "&ref=" +
-                  encodeURI(window.location.href);
-                window.location.href = url;
-              }
-            })
-            .catch((error) => {
-              if (that.includeCable) {
-                that.gotoCartError("49-cable");
-              }
-              if (that.addedWifi) {
-                that.gotoCartError("wifi-antena");
-              }
-              if (that.includeEthAdapter.added) {
-                that.gotoCartError("1215-cable");
-              }
-              if (that.debugMode) {
-                console.log(error);
-                toastr.error(error);
-              } else {
-                toastr.error("Something went wrong, please try again");
-              }
-            })
-            .finally(function () {
-              that.loading = false;
-            });
+          );
+          
+          // Optional: Log cart data for development purposes
+          console.log("Cart Data:", {
+            products: that.cartProducts,
+            total: that.cartTotal,
+            vin: that.vin,
+            fullVin: that.fullVin
+          });
+          
         } else {
           toastr.remove();
           if (that.includeCable) {
@@ -1911,6 +1835,26 @@ var appCoding = new Vue({
       }
       that.calculateTotal();
       $("#ethModal").modal("hide");
+    },
+    removeFromCart: function (productIdName) {
+      var that = this;
+      // Remove from cartProducts array
+      for (var j = 0; j < that.cartProducts.length; j++) {
+        if (that.cartProducts[j].productIdName == productIdName) {
+          that.cartTotal = that.cartTotal - that.cartProducts[j].productPrice;
+          that.cartProducts.splice(j, 1);
+          break;
+        }
+      }
+      // Update product selected state
+      for (var i = 0; i < that.productList.length; i++) {
+        if (that.productList[i].id === productIdName) {
+          that.productList[i].selected = false;
+          break;
+        }
+      }
+      that.calculateTotal();
+      toastr.success("Product removed from cart.");
     },
   },
   watch: {},

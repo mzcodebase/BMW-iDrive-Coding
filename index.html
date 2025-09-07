@@ -5,6 +5,10 @@
   <meta charset="UTF-8" />
   <title>BMW iDrive Coding</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Google Fonts - Strait -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Strait&display=swap" rel="stylesheet">
   <!-- AOS CSS -->
   <link rel="stylesheet" href="node_modules/aos/dist/aos.css" />
   <!-- Toastr CSS -->
@@ -21,6 +25,14 @@
           <stop offset="0%" stop-color="#267778" />
           <stop offset="100%" stop-color="#2cc3bb" />
         </linearGradient>
+        <linearGradient id="filter-btn-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1dae90" />
+          <stop offset="100%" stop-color="#2ec0a8" />
+        </linearGradient>
+        <linearGradient id="filter-btn-active-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#26a69a" />
+          <stop offset="100%" stop-color="#50c8b8" />
+        </linearGradient>
       </defs>
     </svg>
 
@@ -29,29 +41,53 @@
         <div class="filters-row">
           <div class="categories">
             <span>Categories:</span>
-            <button @click="productFilter('sound')" :class="{active: filters.sound}">
-              Sound
+            <button @click="productFilter('sound')" class="svg-filter-btn" :class="{active: filters.sound}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Sound</text>
+              </svg>
             </button>
-            <button @click="productFilter('infotainment')" :class="{active: filters.infotainment}">
-              Infotainment
+            <button @click="productFilter('infotainment')" class="svg-filter-btn" :class="{active: filters.infotainment}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Infotainment</text>
+              </svg>
             </button>
-            <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">
-              Doors & Trunk
+            <button @click="productFilter('doors_trunk')" class="svg-filter-btn" :class="{active: filters.doors_trunk}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Doors & Trunk</text>
+              </svg>
             </button>
-            <button @click="productFilter('navigation')" :class="{active: filters.navigation}">
-              Navigation
+            <button @click="productFilter('navigation')" class="svg-filter-btn" :class="{active: filters.navigation}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Navigation</text>
+              </svg>
             </button>
-            <button @click="productFilter('display')" :class="{active: filters.display}">
-              Display
+            <button @click="productFilter('display')" class="svg-filter-btn" :class="{active: filters.display}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Display</text>
+              </svg>
             </button>
-            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">
-              Service & Diagnostic
+            <button @click="productFilter('service_diagnostic')" class="svg-filter-btn svg-filter-btn--wide" :class="{active: filters.service_diagnostic}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="filter-btn-text">Service & Diagnostic</text>
+              </svg>
             </button>
-            <button @click="productFilter('video')" :class="{active: filters.video}">
-              Video
+            <button @click="productFilter('video')" class="svg-filter-btn" :class="{active: filters.video}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Video</text>
+              </svg>
             </button>
-            <button @click="productFilter('control')" :class="{active: filters.control}">
-              Control
+            <button @click="productFilter('control')" class="svg-filter-btn" :class="{active: filters.control}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Control</text>
+              </svg>
             </button>
           </div>
           <button class="clear-filters" @click="productFilter()">
@@ -61,14 +97,23 @@
         <div class="filters-row">
           <div class="types">
             <span>Type:</span>
-            <button @click="productFilterType('all')" :class="{active: filterType==='all'}">
-              All
+            <button @click="productFilterType('all')" class="svg-filter-btn" :class="{active: filterType==='all'}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">All</text>
+              </svg>
             </button>
-            <button @click="productFilterType('usb')" :class="{active: filterType==='usb'}">
-              USB
+            <button @click="productFilterType('usb')" class="svg-filter-btn" :class="{active: filterType==='usb'}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">USB</text>
+              </svg>
             </button>
-            <button @click="productFilterType('cable')" :class="{active: filterType==='cable'}">
-              Cable
+            <button @click="productFilterType('cable')" class="svg-filter-btn" :class="{active: filterType==='cable'}">
+              <svg viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="filter-btn-shape" points="20,0 100,0 100,18 80,32 0,32 0,14" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Cable</text>
+              </svg>
             </button>
           </div>
           <div class="sorting">
@@ -86,34 +131,58 @@
         <h3>{{ selectedHeading }}</h3>
         <div class="grid">
           <div class="card card-product" v-for="p in filteredPrimary" :key="p.id">
-            <div class="card-top">
-              <div class="left">
-                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
-                <div class="title">{{ p.name }}</div>
-              </div>
-              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
-                {{ p.cable ? 'Cable' : 'USB' }}
-              </div>
+            <div class="svg-background">
+              <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+                <polygon points="0,0 300,0 300,180 280,200 0,200" fill="var(--panel)" stroke="var(--product-svg-border)"
+                  stroke-width="1" stroke-linejoin="miter" />
+              </svg>
             </div>
-            <div class="card-body">
-              <p class="small">{{ p.smallDescription }}</p>
-              <button class="link" @click="showMore(p.id)">
-                learn more →
-              </button>
-              <div class="bottom">
-                <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
-                    ${{ p.originalPrice | priceFormat }}
-                  </div>
-                  <div class="now">${{ p.price | priceUi }}</div>
+
+            <!-- Content Layer -->
+            <div class="card-content">
+              <!-- Top Row -->
+              <div class="card-top">
+                <div class="left">
+                  <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
+                  <div class="title">{{ p.name }}</div>
                 </div>
-                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
-                  @click="selectProduct(p.id)">
-                  <span>+ Select</span>
+                <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
+                  {{ p.cable ? 'Cable' : 'USB' }}
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+                <p class="small">{{ p.smallDescription }}</p>
+                <button class="link" @click="showMore(p.id)">
+                  learn more →
                 </button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
-                  <span>Remove</span>
-                </button>
+                <div class="bottom">
+                  <div class="price-block">
+                    <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
+                      ${{ p.originalPrice | priceFormat }}
+                    </div>
+                    <div class="now">${{ p.price | priceUi }}</div>
+                  </div>
+
+                  <button v-if="!p.selected" class="svg-btn svg-btn--gradient" @click="selectProduct(p.id)"
+                    :aria-label="`Select ${p.name}`">
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                      <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+                    </svg>
+                  </button>
+
+                  <!-- Remove -->
+                  <button v-else class="svg-btn svg-btn--outline" @click="selectProduct(p.id)"
+                    :aria-label="`Remove ${p.name}`">
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                      <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
+                    </svg>
+                  </button>
+
+                </div>
               </div>
             </div>
           </div>
@@ -124,34 +193,58 @@
         <h3>Other coding options</h3>
         <div class="grid">
           <div class="card card-product" v-for="p in filteredSecondary" :key="p.id">
-            <div class="card-top">
-              <div class="left">
-                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
-                <div class="title">{{ p.name }}</div>
-              </div>
-              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
-                {{ p.cable ? 'Cable' : 'USB' }}
-              </div>
+            <div class="svg-background">
+              <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+                <polygon points="0,0 300,0 300,180 280,200 0,200" fill="var(--panel)" stroke="var(--product-svg-border)"
+                  stroke-width="1" stroke-linejoin="miter" />
+              </svg>
             </div>
-            <div class="card-body">
-              <p class="small">{{ p.smallDescription }}</p>
-              <button class="link" @click="showMore(p.id)">
-                learn more →
-              </button>
-              <div class="bottom">
-                <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
-                    ${{ p.originalPrice | priceFormat }}
-                  </div>
-                  <div class="now">${{ p.price | priceUi }}</div>
+
+            <!-- Content Layer -->
+            <div class="card-content">
+              <!-- Top Row -->
+              <div class="card-top">
+                <div class="left">
+                  <img src="assets/img/icons/picon.svg" alt="" class="prod-icon" />
+                  <div class="title">{{ p.name }}</div>
                 </div>
-                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
-                  @click="selectProduct(p.id)">
-                  <span>+ Select</span>
+                <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
+                  {{ p.cable ? 'Cable' : 'USB' }}
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+                <p class="small">{{ p.smallDescription }}</p>
+                <button class="link" @click="showMore(p.id)">
+                  learn more →
                 </button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
-                  <span>Remove</span>
-                </button>
+                <div class="bottom">
+                  <div class="price-block">
+                    <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
+                      ${{ p.originalPrice | priceFormat }}
+                    </div>
+                    <div class="now">${{ p.price | priceUi }}</div>
+                  </div>
+
+                  <button v-if="!p.selected" class="svg-btn svg-btn--gradient" @click="selectProduct(p.id)"
+                    :aria-label="`Select ${p.name}`">
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                      <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+                    </svg>
+                  </button>
+
+                  <!-- Remove -->
+                  <button v-else class="svg-btn svg-btn--outline" @click="selectProduct(p.id)"
+                    :aria-label="`Remove ${p.name}`">
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                      <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
+                    </svg>
+                  </button>
+
+                </div>
               </div>
             </div>
           </div>
@@ -218,6 +311,57 @@
       </div>
     </section>
 
+    <!-- Cart Summary Section -->
+    <div v-if="cartProducts.length > 0" class="cart-summary">
+      <div class="cart-summary-header">
+        <h3>Summary</h3>
+      </div>
+      
+      <div class="cart-items">
+        <div v-for="item in cartProducts" :key="item.productIdName" class="cart-item">
+          <div class="cart-item-icon">
+            <img src="assets/img/icons/picon.svg" alt="" />
+          </div>
+          <div class="cart-item-details">
+            <div class="cart-item-name">{{ item.productName }}</div>
+            <div class="cart-item-price">${{ item.productPrice | priceUi }}</div>
+          </div>
+          <button class="cart-item-remove" @click="removeFromCart(item.productIdName)">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="cart-total">
+        <div class="cart-total-info">
+          <div class="cart-total-label">Total Price:</div>
+          <div class="cart-total-minimum">Minimum order $70</div>
+        </div>
+        <div class="cart-total-amount">${{ cartTotal | priceUi }}</div>
+      </div>
+
+      <div class="cart-terms">
+        <label class="cart-checkbox">
+          <input type="checkbox" v-model="acceptTerms" />
+          <span class="checkmark"></span>
+          I accept BimmerTech's terms & conditions.
+        </label>
+      </div>
+
+      <div class="cart-disclaimer">
+        I understand that I am purchasing software changes to features already implemented by BMW and that BimmerTech has no influence on the availability of features or their intended usage. <a href="#" class="read-more">Read more</a>
+      </div>
+
+      <button class="cart-checkout-btn" @click="gotoCheckout" :disabled="!acceptTerms || cartTotal < minimumAmount">
+        <svg viewBox="0 0 200 50" preserveAspectRatio="none" role="img" aria-hidden="true">
+          <polygon class="checkout-btn-shape" points="15,0 200,0 200,35 185,50 0,50 0,15" />
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Proceed to Checkout</text>
+        </svg>
+      </button>
+    </div>
+
     <div v-if="detailProduct" class="modal-backdrop" @click.self="showDetails=''">
       <div class="modal">
         <div class="modal-header modal-header--product">
@@ -234,13 +378,19 @@
                 class="orig">${{ detailProduct.originalPrice | priceFormat }}</span>
               <span class="now">${{ detailProduct.price | priceUi }}</span>
             </div>
-            <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
+            <button v-if="!detailProduct.selected" class="svg-btn svg-btn--gradient"
               @click="selectProduct(detailProduct.id)">
-              <span>+ Select</span>
+              <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+              </svg>
             </button>
-            <button v-else class="parallelogram-btn parallelogram-btn--outline"
+            <button v-else class="svg-btn svg-btn--outline"
               @click="selectProduct(detailProduct.id)">
-              <span>Remove</span>
+              <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
+              </svg>
             </button>
           </div>
           <button class="close" @click="showDetails=''">×</button>
@@ -268,12 +418,18 @@
           <p v-html="detailProduct.description"></p>
         </div>
         <div class="modal-actions modal-actions--product">
-          <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
+          <button v-if="!detailProduct.selected" class="svg-btn svg-btn--gradient"
             @click="selectProduct(detailProduct.id)">
-            <span>+ Select</span>
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+              <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+            </svg>
           </button>
-          <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)">
-            <span>Remove</span>
+          <button v-else class="svg-btn svg-btn--outline" @click="selectProduct(detailProduct.id)">
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+              <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
+            </svg>
           </button>
         </div>
       </div>
