@@ -23,6 +23,9 @@ var appCoding = new Vue({
       vinProducts: [],
       cartProducts: [],
       showDetails: "",
+      showOptionsModal: false,
+      selectedProductForOptions: null,
+      selectedOption: null,
       cartId: 0,
       searchProductId: "",
       searchProductVinId: "",
@@ -808,6 +811,24 @@ var appCoding = new Vue({
               toastr.remove();
               toastr.success("Product removed from cart.");
             } else {
+              // Check if product has dropdown options that need selection
+              console.log("Checking product for dropdown:", that.productList[i].name, "has dropdown:", !!that.productList[i].dropdown);
+              if (that.productList[i].dropdown && that.productList[i].dropdown.length > 0) {
+                console.log("Opening options modal for product:", that.productList[i].name);
+                that.selectedProductForOptions = that.productList[i];
+                that.selectedOption = null;
+                that.showOptionsModal = true;
+                that.productLoading = false;
+                that.productLoadingId = "";
+                if (revertFilter.length > 0) {
+                  for (var r = 0; r < revertFilter.length; r++) {
+                    that.filters[revertFilter[r]] = true;
+                  }
+                  that.filterVin();
+                }
+                return;
+              }
+              
               let cable = 0;
               if (that.productList[i].cable) {
                 cable = 1;
@@ -890,6 +911,24 @@ var appCoding = new Vue({
                   toastr.warning("Please select option from dropdown!");
                 }
               } else {
+                // Check if product has dropdown options that need selection
+                console.log("Path 2 - Checking product for dropdown:", that.productList[i].name, "has dropdown:", !!that.productList[i].dropdown);
+                if (that.productList[i].dropdown && that.productList[i].dropdown.length > 0) {
+                  console.log("Path 2 - Opening options modal for product:", that.productList[i].name);
+                  that.selectedProductForOptions = that.productList[i];
+                  that.selectedOption = null;
+                  that.showOptionsModal = true;
+                  that.productLoading = false;
+                  that.productLoadingId = "";
+                  if (revertFilter.length > 0) {
+                    for (var r = 0; r < revertFilter.length; r++) {
+                      that.filters[revertFilter[r]] = true;
+                    }
+                    that.filterVin();
+                  }
+                  return;
+                }
+                
                 if (
                   that.productList[i].custom &&
                   !that.productList[i].dropdown
@@ -1855,6 +1894,98 @@ var appCoding = new Vue({
       }
       that.calculateTotal();
       toastr.success("Product removed from cart.");
+    },
+
+    // Options Modal Methods
+    closeOptionsModal: function() {
+      this.showOptionsModal = false;
+      this.selectedProductForOptions = null;
+      this.selectedOption = null;
+    },
+
+    selectOption: function(option) {
+      this.selectedOption = option;
+    },
+
+    confirmOptionSelection: function() {
+      if (!this.selectedOption || !this.selectedProductForOptions) {
+        toastr.error("Please select an option first.");
+        return;
+      }
+
+      var that = this;
+      var product = this.selectedProductForOptions;
+      var option = this.selectedOption;
+      
+      // Calculate final price including option price
+      var finalPrice = product.price + (option.price || 0);
+      
+      let cable = 0;
+      if (product.cable) {
+        cable = 1;
+      }
+
+      // Add to cart with selected option
+      that.cartProducts.push({
+        productId: option.shopId || product.id,
+        variantId: option.shopId || product.id,
+        productName: product.name + " - " + option.name,
+        productPrice: finalPrice,
+        productIdName: product.id,
+        productIcon: product.icon,
+        addedWifi: false,
+        warranty: 0,
+        savePrice: 0,
+        isCable: 0,
+        cable: cable,
+        selectedOption: option
+      });
+
+      that.cartTotal = that.cartTotal + finalPrice;
+      
+      // Mark product as selected
+      for (var i = 0; i < that.productList.length; i++) {
+        if (that.productList[i].id === product.id) {
+          that.productList[i].selected = true;
+          break;
+        }
+      }
+
+      // Close modal
+      that.closeOptionsModal();
+      
+      toastr.success("Product added to <b><u>cart</u></b>.", "", {
+        onclick: function () {
+          var elmnt = document.getElementById("selected-upgrades");
+          elmnt.scrollIntoView();
+        },
+      });
+    },
+
+    getOptionImage: function(option) {
+      // Return pin images based on option index or name
+      if (option.name.toLowerCase().includes("usb-c") || option.name.toLowerCase().includes("type c")) {
+        return "assets/img/pin-2.png";
+      } else if (option.name.toLowerCase().includes("usb-a") || option.name.toLowerCase().includes("type a")) {
+        return "assets/img/pin-1.png";
+      }
+      // Default to pin-1.png for first option, pin-2.png for second option
+      return "assets/img/pin-1.png";
+    },
+
+    getConnectorImage: function(option) {
+      // Return connector-specific image based on option name
+      if (option.name.toLowerCase().includes("usb-c") || option.name.toLowerCase().includes("type c")) {
+        return "assets/img/pin-2.png";
+      } else if (option.name.toLowerCase().includes("usb-a") || option.name.toLowerCase().includes("type a")) {
+        return "assets/img/pin-1.png";
+      }
+      return "assets/img/pin-1.png";
+    },
+
+    formatPrice: function(price) {
+      if (!price) return "0.00";
+      return (price / 100).toFixed(2);
     },
   },
   watch: {},

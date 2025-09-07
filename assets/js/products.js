@@ -1,6 +1,38 @@
 var products = [
   //    custom products below
   {
+    vinCheckId: 999,
+    shopId: 999,
+    id: "test_cable_product",
+    name: "BMW ENET Cable",
+    price: 3149, // $31.49 in cents
+    showOnStartUp: false,
+    bestseller: false,
+    custom: true,
+    cable: true,
+    smallDescription: "Makes it easy to attach an ENET cable to your laptop. Available with USB Type A or USB-C endings.",
+    description: "Professional ENET cable for BMW coding. Choose the connector type that matches your laptop.",
+    icon: "cable.svg",
+    image: "cable.jpg",
+    dropdown: [
+      {
+        id: "usb_type_a",
+        name: "USB Type A",
+        price: 0,
+        shopId: "usb_type_a_shop_id"
+      },
+      {
+        id: "usb_type_c", 
+        name: "USB Type C",
+        price: 0,
+        shopId: "usb_type_c_shop_id"
+      }
+    ],
+    filters: {
+      control: true,
+    },
+  },
+  {
     vinCheckId: 178,
     shopId: 488,
     id: 488,
@@ -84,27 +116,27 @@ var products = [
       navigation: true,
     },
   },
-  {
-    vinCheckId: 177,
-    shopId: 487,
-    id: 487,
-    name: "BMW Map Update",
-    price: 139,
-    showOnStartUp: true,
-    bestseller: false,
-    custom: true,
-    smallDescription:
-      "BMW map update ensures you'll always know the best and fastest routes to get to your destination.",
-    description:
-      "<div class='product-moving-description'>They say time is money, so finding your way around as quickly as possible should be a priority. BMW map update ensures you'll always know the best and fastest routes to get to your destination.<br><br>When you regularly perform BMW navigation update, your map shows you:<br><span class='bullet'>&bull;</span>New roads opened or existing ones closed<br><span class='bullet'>&bull;</span>Time-saving detours for your usual rides<br><span class='bullet'>&bull;</span>Almost 300 000 new points of interest added each year (hotels, gas stations, cafes, etc.) <br><br>BMW recommends performing a BMW GPS update at least once a year. For anybody who drives a lot, though, itâ€™s better to do a BMW map update download every three to six months. <br><br>At BimmerTech we offer a quick and easy BMW USB map update process, all in the comfort of your home. </div>",
-    video:
-      '<iframe class="product-video-youtube" src="https://www.youtube.com/embed/2Phqd3-i6T8" frameborder="0" allowfullscreen></iframe>',
-    icon: "map.svg",
-    image: "traffic-information.jpg",
-    filters: {
-      navigation: true,
-    },
-  },
+  // {
+  //   vinCheckId: 177,
+  //   shopId: 487,
+  //   id: 487,
+  //   name: "BMW Map Update",
+  //   price: 139,
+  //   showOnStartUp: true,
+  //   bestseller: false,
+  //   custom: true,
+  //   smallDescription:
+  //     "BMW map update ensures you'll always know the best and fastest routes to get to your destination.",
+  //   description:
+  //     "<div class='product-moving-description'>They say time is money, so finding your way around as quickly as possible should be a priority. BMW map update ensures you'll always know the best and fastest routes to get to your destination.<br><br>When you regularly perform BMW navigation update, your map shows you:<br><span class='bullet'>&bull;</span>New roads opened or existing ones closed<br><span class='bullet'>&bull;</span>Time-saving detours for your usual rides<br><span class='bullet'>&bull;</span>Almost 300 000 new points of interest added each year (hotels, gas stations, cafes, etc.) <br><br>BMW recommends performing a BMW GPS update at least once a year. For anybody who drives a lot, though, itâ€™s better to do a BMW map update download every three to six months. <br><br>At BimmerTech we offer a quick and easy BMW USB map update process, all in the comfort of your home. </div>",
+  //   video:
+  //     '<iframe class="product-video-youtube" src="https://www.youtube.com/embed/2Phqd3-i6T8" frameborder="0" allowfullscreen></iframe>',
+  //   icon: "map.svg",
+  //   image: "traffic-information.jpg",
+  //   filters: {
+  //     navigation: true,
+  //   },
+  // },
   {
     vinCheckId: 173,
     shopId: 483,

@@ -467,6 +467,60 @@
         </div>
       </div>
     </div>
+
+    <!-- Product Options Selection Modal -->
+    <div v-if="showOptionsModal" class="modal-backdrop" @click.self="closeOptionsModal">
+      <div class="modal modal--options">
+        <!-- Header -->
+        <div class="modal-options-header">
+          <button class="modal-close" @click="closeOptionsModal">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Title and Description -->
+        <div class="modal-options-content">
+          <h2 class="modal-options-title">Select version for your {{ selectedProductForOptions?.vehicleModel || 'Vehicle' }}:</h2>
+          <p class="modal-options-description">{{ selectedProductForOptions?.smallDescription || 'Choose the right option for your vehicle.' }}</p>
+
+          <!-- Options Grid -->
+          <div class="modal-options-grid">
+            <div v-for="(option, index) in selectedProductForOptions?.dropdown?.[0]?.options || []" 
+                 :key="option.id" 
+                 class="modal-option-card"
+                 @click="selectOption(option)">
+              <div class="option-image">
+                <img :src="getOptionImage(option)" :alt="option.name" />
+                <div class="option-connector-closeup">
+                  <img :src="getConnectorImage(option)" :alt="option.name + ' connector'" />
+                </div>
+              </div>
+              <div class="option-label">{{ option.name }}</div>
+              <div class="option-price">${{ formatPrice(option.price || selectedProductForOptions?.price) }}</div>
+              <button class="option-select-btn" :class="{ active: selectedOption?.id === option.id }">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                  <polygon class="option-btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+                  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Footer Disclaimer and Confirm Button -->
+          <div class="modal-options-footer">
+            <p class="disclaimer">*Only by entering your VIN you can be 100% sure you get the right version of the product for your vehicle.</p>
+            <button v-if="selectedOption" class="modal-confirm-btn" @click="confirmOptionSelection">
+              <svg viewBox="0 0 200 50" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="confirm-btn-shape" points="10,0 200,0 200,25 190,50 0,50 0,17" />
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Confirm Selection</text>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Vue.js (Vue 2) -->
