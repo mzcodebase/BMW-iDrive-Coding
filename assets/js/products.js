@@ -1116,6 +1116,20 @@ var products = [
         shopId: 421,
       },
     ],
+    dropdown: [
+      {
+        id: "id5_option",
+        name: "ID5 Interface",
+        price: 0,
+        shopId: 419
+      },
+      {
+        id: "id6_option", 
+        name: "ID6 Interface",
+        price: 0,
+        shopId: 421
+      }
+    ],
     filters: {
       display: true,
     },
