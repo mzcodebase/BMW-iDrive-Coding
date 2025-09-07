@@ -363,50 +363,81 @@
     </div>
 
     <div v-if="detailProduct" class="modal-backdrop" @click.self="showDetails=''">
-      <div class="modal">
-        <div class="modal-header modal-header--product">
-          <div class="modal-badge">
+      <div class="modal modal--product-detail">
+        <!-- Header with close button -->
+        <div class="modal-header-detail">
+          <button class="modal-close" @click="showDetails=''">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="modal-product-info">
+          <div class="modal-product-badge">
             {{ detailProduct.cable ? 'Cable' : 'USB' }}
           </div>
-          <div class="modal-head-main">
-            <img src="assets/img/icons/picon.svg" alt="" class="modal-icon" />
-            <div class="modal-title">{{ detailProduct.name }}</div>
-          </div>
-          <div class="modal-head-cta">
-            <div class="modal-price">
-              <span v-if="detailProduct.originalPrice && detailProduct.originalPrice>detailProduct.price"
-                class="orig">${{ detailProduct.originalPrice | priceFormat }}</span>
-              <span class="now">${{ detailProduct.price | priceUi }}</span>
+          <div class="modal-product-header">
+            <div class="modal-product-icon">
+              <img src="assets/img/icons/picon.svg" alt="" />
             </div>
-            <button v-if="!detailProduct.selected" class="svg-btn svg-btn--gradient"
+            <div class="modal-product-title">{{ detailProduct.name }}</div>
+            <div class="modal-product-price">
+              <span v-if="detailProduct.originalPrice && detailProduct.originalPrice>detailProduct.price"
+                class="price-original">${{ detailProduct.originalPrice | priceFormat }}</span>
+              <span class="price-current">${{ detailProduct.price | priceUi }}</span>
+            </div>
+            <button v-if="!detailProduct.selected" class="modal-select-btn"
               @click="selectProduct(detailProduct.id)">
-              <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
-                <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+              <svg viewBox="0 0 120 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="select-btn-shape" points="10,0 120,0 120,25 110,40 0,40 0,17" />
                 <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
               </svg>
             </button>
-            <button v-else class="svg-btn svg-btn--outline"
+            <button v-else class="modal-select-btn"
               @click="selectProduct(detailProduct.id)">
-              <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
-                <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+              <svg viewBox="0 0 120 40" preserveAspectRatio="none" role="img" aria-hidden="true">
+                <polygon class="select-btn-shape" points="10,0 120,0 120,25 110,40 0,40 0,17" />
                 <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
               </svg>
             </button>
           </div>
-          <button class="close" @click="showDetails=''">×</button>
         </div>
-        <div class="modal-body modal-body--product">
-          <div v-if="detailProduct.video" class="media">
-            <iframe :src="detailProduct.video" frameborder="0" allowfullscreen></iframe>
-          </div>
-          <div v-else-if="detailProduct.image" class="media">
-            <img :src="detailProduct.image" alt="" />
+
+        <!-- Content Section -->
+        <div class="modal-content-detail">
+          <div class="modal-description">
+            <p v-html="detailProduct.description"></p>
           </div>
 
-          <div v-if="detailProduct.dropdown && detailProduct.dropdown.length" class="modal-options">
-            <div class="modal-option" v-for="dd in detailProduct.dropdown" :key="dd.id">
-              <label class="modal-option__label">{{ dd.name }}</label>
-              <select class="modal-option__select" v-model="dd.selectedOption"
+          <!-- Video Section -->
+          <div v-if="detailProduct.video" class="modal-video-section">
+            <div class="video-header">
+              <div class="video-header-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+              <div class="video-header-title">{{ detailProduct.name }} – What is it?</div>
+              <div class="video-header-menu">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                  <circle cx="12" cy="5" r="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <circle cx="12" cy="19" r="2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="video-container">
+              <div v-html="detailProduct.video" class="video-iframe"></div>
+            </div>
+          </div>
+
+          <!-- Options Section -->
+          <div v-if="detailProduct.dropdown && detailProduct.dropdown.length" class="modal-options-detail">
+            <div class="modal-option-detail" v-for="dd in detailProduct.dropdown" :key="dd.id">
+              <label class="option-label">{{ dd.name }}</label>
+              <select class="option-select" v-model="dd.selectedOption"
                 @change="productOptSelectionPrice(detailProduct.id)">
                 <option v-for="opt in dd.options" :key="opt.id" :value="opt.id">
                   {{ opt.name }}<span v-if="opt.price">
@@ -415,19 +446,21 @@
               </select>
             </div>
           </div>
-          <p v-html="detailProduct.description"></p>
         </div>
-        <div class="modal-actions modal-actions--product">
-          <button v-if="!detailProduct.selected" class="svg-btn svg-btn--gradient"
+
+        <!-- Bottom Action Button -->
+        <div class="modal-bottom-action">
+          <button v-if="!detailProduct.selected" class="modal-bottom-btn"
             @click="selectProduct(detailProduct.id)">
-            <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
-              <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+            <svg viewBox="0 0 200 50" preserveAspectRatio="none" role="img" aria-hidden="true">
+              <polygon class="bottom-btn-shape" points="10,0 200,0 200,25 190,50 0,50 0,17" />
               <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">+ Select</text>
             </svg>
           </button>
-          <button v-else class="svg-btn svg-btn--outline" @click="selectProduct(detailProduct.id)">
-            <svg viewBox="0 0 100 40" preserveAspectRatio="none" role="img" aria-hidden="true">
-              <polygon class="btn-shape" points="10,0 100,0 100,25 90,40 0,40 0,17" />
+          <button v-else class="modal-bottom-btn"
+            @click="selectProduct(detailProduct.id)">
+            <svg viewBox="0 0 200 50" preserveAspectRatio="none" role="img" aria-hidden="true">
+              <polygon class="bottom-btn-shape" points="10,0 200,0 200,25 190,50 0,50 0,17" />
               <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">Remove</text>
             </svg>
           </button>
