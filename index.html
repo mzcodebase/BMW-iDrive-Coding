@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>BMW iDrive Coding</title>
@@ -11,10 +12,10 @@
   <!-- Add your custom CSS here -->
   <link rel="stylesheet" href="assets/styles/idrive.css">
 </head>
+
 <body>
   <div id="app">
     <section id="category-filter">
-      <h2>Check your coding options</h2>
       <div class="filters">
         <div class="filters-row">
           <div class="categories">
@@ -24,7 +25,8 @@
             <button @click="productFilter('doors_trunk')" :class="{active: filters.doors_trunk}">Doors & Trunk</button>
             <button @click="productFilter('navigation')" :class="{active: filters.navigation}">Navigation</button>
             <button @click="productFilter('display')" :class="{active: filters.display}">Display</button>
-            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service & Diagnostic</button>
+            <button @click="productFilter('service_diagnostic')" :class="{active: filters.service_diagnostic}">Service &
+              Diagnostic</button>
             <button @click="productFilter('video')" :class="{active: filters.video}">Video</button>
             <button @click="productFilter('control')" :class="{active: filters.control}">Control</button>
           </div>
@@ -64,11 +66,14 @@
               <button class="link" @click="showMore(p.id)">learn more →</button>
               <div class="bottom">
                 <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat
+                    }}</div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
-                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
+                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
+                  @click="selectProduct(p.id)"><span>+ Select</span></button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline"
+                  @click="selectProduct(p.id)"><span>Remove</span></button>
               </div>
             </div>
           </div>
@@ -91,11 +96,14 @@
               <button class="link" @click="showMore(p.id)">learn more →</button>
               <div class="bottom">
                 <div class="price-block">
-                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat
+                    }}</div>
                   <div class="now">${{ p.price | priceUi }}</div>
                 </div>
-                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
-                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
+                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
+                  @click="selectProduct(p.id)"><span>+ Select</span></button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline"
+                  @click="selectProduct(p.id)"><span>Remove</span></button>
               </div>
             </div>
           </div>
@@ -104,26 +112,54 @@
 
       <div v-if="!filtersActive" class="grid">
         <div class="card card-product" v-for="p in _applySorting(productList)" :key="p.id">
-          <div class="card-top">
-            <div class="left">
-              <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
-              <div class="title">{{ p.name }}</div>
-            </div>
-            <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">{{ p.cable ? 'Cable' : 'USB' }}</div>
+          <div class="svg-background">
+            <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+              <polygon points="0,0 300,0 300,180 280,200 0,200" fill="var(--panel)" stroke="var(--product-svg-border)"
+                stroke-width="1" stroke-linejoin="miter" />
+            </svg>
           </div>
-          <div class="card-body">
-            <p class="small">{{ p.smallDescription }}</p>
-            <button class="link" @click="showMore(p.id)">learn more →</button>
-            <div class="bottom">
-              <div class="price-block">
-                <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">${{ p.originalPrice | priceFormat }}</div>
-                <div class="now">${{ p.price | priceUi }}</div>
+
+          <!-- Content Layer -->
+          <div class="card-content">
+            <!-- Top Row -->
+            <div class="card-top">
+              <div class="left">
+                <img src="assets/img/icons/picon.svg" alt="" class="prod-icon">
+                <div class="title">{{ p.name }}</div>
               </div>
-              <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(p.id)"><span>+ Select</span></button>
-              <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)"><span>Remove</span></button>
+              <div class="side-badge" :class="{ cable: p.cable, usb: !p.cable }">
+                {{ p.cable ? 'Cable' : 'USB' }}
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+              <p class="small">{{ p.smallDescription }}</p>
+              <button class="link" @click="showMore(p.id)">learn more →</button>
+              <div class="bottom">
+                <div class="price-block">
+                  <div v-if="p.originalPrice && p.originalPrice>p.price" class="orig">
+                    ${{ p.originalPrice | priceFormat }}
+                  </div>
+                  <div class="now">
+                    ${{ p.price | priceUi }}
+                  </div>
+                </div>
+
+                <!-- Buttons -->
+                <button v-if="!p.selected" class="parallelogram-btn parallelogram-btn--gradient"
+                  @click="selectProduct(p.id)">
+                  <span>+ Select</span>
+                </button>
+                <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(p.id)">
+                  <span>Remove</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
+
       </div>
     </section>
 
@@ -137,11 +173,14 @@
           </div>
           <div class="modal-head-cta">
             <div class="modal-price">
-              <span v-if="detailProduct.originalPrice && detailProduct.originalPrice>detailProduct.price" class="orig">${{ detailProduct.originalPrice | priceFormat }}</span>
+              <span v-if="detailProduct.originalPrice && detailProduct.originalPrice>detailProduct.price"
+                class="orig">${{ detailProduct.originalPrice | priceFormat }}</span>
               <span class="now">${{ detailProduct.price | priceUi }}</span>
             </div>
-            <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
-            <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
+            <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
+              @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
+            <button v-else class="parallelogram-btn parallelogram-btn--outline"
+              @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
           </div>
           <button class="close" @click="showDetails=''">×</button>
         </div>
@@ -156,7 +195,8 @@
           <div v-if="detailProduct.dropdown && detailProduct.dropdown.length" class="modal-options">
             <div class="modal-option" v-for="dd in detailProduct.dropdown" :key="dd.id">
               <label class="modal-option__label">{{ dd.name }}</label>
-              <select class="modal-option__select" v-model="dd.selectedOption" @change="productOptSelectionPrice(detailProduct.id)">
+              <select class="modal-option__select" v-model="dd.selectedOption"
+                @change="productOptSelectionPrice(detailProduct.id)">
                 <option v-for="opt in dd.options" :key="opt.id" :value="opt.id">
                   {{ opt.name }}<span v-if="opt.price"> (+${{ (opt.price/100).toFixed(2) }})</span>
                 </option>
@@ -166,8 +206,10 @@
           <p v-html="detailProduct.description"></p>
         </div>
         <div class="modal-actions modal-actions--product">
-          <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient" @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
-          <button v-else class="parallelogram-btn parallelogram-btn--outline" @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
+          <button v-if="!detailProduct.selected" class="parallelogram-btn parallelogram-btn--gradient"
+            @click="selectProduct(detailProduct.id)"><span>+ Select</span></button>
+          <button v-else class="parallelogram-btn parallelogram-btn--outline"
+            @click="selectProduct(detailProduct.id)"><span>Remove</span></button>
         </div>
       </div>
     </div>
@@ -191,4 +233,5 @@
   <script src="assets/js/products.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
+
 </html>

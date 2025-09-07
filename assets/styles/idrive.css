@@ -1,4 +1,3 @@
-/* Minimal styles to match the new iDrive coding UI */
 :root {
   --bg: #0c0f10;
   --panel: #0f1416;
@@ -7,6 +6,7 @@
   --accent: #267778;
   --accent-2: #0e6e68;
   --danger: #de6a6a;
+  --product-svg-border: #ffffff33;
 }
 body {
   background: var(--bg);
@@ -29,9 +29,19 @@ body {
   gap: 16px;
   margin-bottom: 16px;
 }
-.filters-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 .filters .categories,
-.filters .types { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.filters .types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
 .filters button {
   background: transparent;
   border: 1px solid var(--muted);
@@ -39,6 +49,8 @@ body {
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
+  /* polygon shape */
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
 }
 .filters button.active {
   border-color: white;
@@ -51,8 +63,17 @@ body {
   padding: 6px 10px;
   border-radius: 6px;
 }
-.clear-filters{background:transparent;border:0;color:#cfe1de;cursor:pointer;margin-left:8px;text-decoration:underline}
-.clear-filters:hover{color:#ffffff}
+.clear-filters {
+  background: transparent;
+  border: 0;
+  color: #cfe1de;
+  cursor: pointer;
+  margin-left: 8px;
+  text-decoration: underline;
+}
+.clear-filters:hover {
+  color: #ffffff;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -74,35 +95,41 @@ body {
   }
 }
 .card {
-  background: var(--panel);
-  border: 1px solid #1b2326;
-  border-radius: 5px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0;
   overflow: hidden;
+}
+
+.card-product {
   position: relative;
 }
-.card-product {
-  border: 1px solid #fff;
-  background: transparent;
-}
-.card-product::after {
-  content: "";
+
+.svg-background {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 18px;
-  height: 18px;
-  background: transparent;
-  border-right: 0;
-  border-bottom: 0;
-  box-shadow: -1px 1px 0 0 #fff inset;
-  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  inset: 0;
+  z-index: 1;
+}
+
+.svg-background svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+}
+
+.card-body {
+  padding: 12px 12px 14px 12px;
+  height: 100%;
 }
 .card-top {
   background: #fff;
-  color: #0f1416;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -134,13 +161,15 @@ body {
   writing-mode: sideways-lr;
   text-orientation: mixed;
 }
-.side-badge.usb{ background:#1E99AA; color:#e6fffb; }
-.side-badge.cable{ background:#1DAE90; color:#e6fffb; }
-.card-body {
-  background: #06090a;
-  padding: 12px 12px 14px 12px;
-  border-top: 1px solid #0f1416;
+.side-badge.usb {
+  background: #1e99aa;
+  color: #e6fffb;
 }
+.side-badge.cable {
+  background: #1dae90;
+  color: #e6fffb;
+}
+
 .price-block {
   display: flex;
   flex-direction: column;
@@ -237,31 +266,40 @@ body {
   position: absolute;
   inset: 0; /* cover full button box */
   border-radius: 6px;
+  /* polygon shape */
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
 }
 .parallelogram-btn > span {
   position: relative;
   display: inline-block;
   transform: none; /* keep label upright when using clip-path */
   padding: 12px 28px;
-  font-family: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
   font-weight: 700;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
 /* Variants */
 .parallelogram-btn--gradient::before {
-  background: linear-gradient(160deg, #1DAE90 0%, #1E99AA 100%);
-  clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%);
+  background: linear-gradient(160deg, #1dae90 0%, #1e99aa 100%);
 }
 .parallelogram-btn--outline::before {
   background: transparent;
   border: 2px solid var(--accent);
-  transform: skewX(-16deg); /* keep outline style using skewed border */
+  /* polygon outline */
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
 }
-.parallelogram-btn--outline > span { color: #e9f1ef; }
-.parallelogram-btn--gradient > span { color: #ffffff; text-shadow: 0 0 1px rgba(0,0,0,.2); }
-.parallelogram-btn:disabled, .parallelogram-btn.disabled {
-  opacity: .55;
-  filter: grayscale(.2);
+.parallelogram-btn--outline > span {
+  color: #e9f1ef;
+}
+.parallelogram-btn--gradient > span {
+  color: #ffffff;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.parallelogram-btn:disabled,
+.parallelogram-btn.disabled {
+  opacity: 0.55;
+  filter: grayscale(0.2);
   cursor: not-allowed;
 }
 .grid-group {
@@ -291,15 +329,58 @@ body {
   padding: 12px 16px;
   background: #e9f4f3;
 }
-.modal-header--product{position:relative;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:14px;background:#f7ffff;border-bottom:1px solid #d6ecea}
-.modal-badge{background:var(--accent);color:#e6fffb;padding:6px 10px;border-radius:4px;writing-mode:vertical-rl;text-orientation:mixed;font-weight:700}
-.modal-head-main{display:flex;align-items:center;gap:10px}
-.modal-icon{width:34px;height:34px}
-.modal-title{font-weight:800;color:var(--accent)}
-.modal-head-cta{display:flex;align-items:center;gap:12px}
-.modal-head-cta .modal-price{display:flex;flex-direction:column;align-items:flex-end;margin-right:6px}
-.modal-head-cta .modal-price .orig{text-decoration:line-through;color:#de6a6a;font-weight:700}
-.modal-head-cta .modal-price .now{color:#166b66;font-weight:900;font-size:20px}
+.modal-header--product {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  background: #f7ffff;
+  border-bottom: 1px solid #d6ecea;
+}
+.modal-badge {
+  background: var(--accent);
+  color: #e6fffb;
+  padding: 6px 10px;
+  border-radius: 4px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-weight: 700;
+}
+.modal-head-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-icon {
+  width: 34px;
+  height: 34px;
+}
+.modal-title {
+  font-weight: 800;
+  color: var(--accent);
+}
+.modal-head-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.modal-head-cta .modal-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 6px;
+}
+.modal-head-cta .modal-price .orig {
+  text-decoration: line-through;
+  color: #de6a6a;
+  font-weight: 700;
+}
+.modal-head-cta .modal-price .now {
+  color: #166b66;
+  font-weight: 900;
+  font-size: 20px;
+}
 .modal-header .badge {
   background: var(--accent-2);
   color: #d3f2ef;
@@ -316,14 +397,36 @@ body {
   font-size: 22px;
   cursor: pointer;
 }
-.modal-body { 
+.modal-body {
   padding: 16px;
 }
-.modal-body--product{background:#171b1c;color:#e9f1ef}
-.modal-body--product p{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;line-height:1.6}
-.modal-options{margin:14px 0 12px;display:grid;gap:12px}
-.modal-option__label{display:block;margin-bottom:6px;color:#cfe1de;font-weight:700}
-.modal-option__select{width:100%;background:#0f1416;color:#e9f1ef;border:1px solid #2a363a;border-radius:6px;padding:8px 10px}
+.modal-body--product {
+  background: #171b1c;
+  color: #e9f1ef;
+}
+.modal-body--product p {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  line-height: 1.6;
+}
+.modal-options {
+  margin: 14px 0 12px;
+  display: grid;
+  gap: 12px;
+}
+.modal-option__label {
+  display: block;
+  margin-bottom: 6px;
+  color: #cfe1de;
+  font-weight: 700;
+}
+.modal-option__select {
+  width: 100%;
+  background: #0f1416;
+  color: #e9f1ef;
+  border: 1px solid #2a363a;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
 .modal-body .media {
   display: flex;
   justify-content: center;
@@ -334,13 +437,17 @@ body {
   max-width: 100%;
   border-radius: 6px;
 }
-.modal-actions { 
+.modal-actions {
   display: flex;
   justify-content: center;
   padding: 12px 16px;
   border-top: 1px solid #e5e9e8;
 }
-.modal-actions--product{background:#171b1c;border-top:0;padding:16px}
+.modal-actions--product {
+  background: #171b1c;
+  border-top: 0;
+  padding: 16px;
+}
 .modal-actions button {
   background: transparent;
   border: 1px solid var(--accent);
@@ -348,4 +455,5 @@ body {
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
 }
