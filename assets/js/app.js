@@ -747,6 +747,7 @@ var appCoding = new Vue({
       var that = this;
       var index = "";
       var revertFilter = [];
+      console.log("selectProduct called with ID:", id);
       // VIN gating removed – allow add/remove without VIN
       if (true) {
         that.productLoading = true;
@@ -789,6 +790,7 @@ var appCoding = new Vue({
         }
         for (var i = 0; i < that.productList.length; i++) {
           if (that.productList[i].id === id) {
+            console.log("Found product:", that.productList[i].name, "Selected:", that.productList[i].selected);
             if (
               that.productList[i].selected ||
               that.productList[i].selected == true
@@ -811,13 +813,13 @@ var appCoding = new Vue({
               toastr.remove();
               toastr.success("Product removed from cart.");
             } else {
-              // Check if product has dropdown options that need selection
               console.log("Checking product for dropdown:", that.productList[i].name, "has dropdown:", !!that.productList[i].dropdown);
               if (that.productList[i].dropdown && that.productList[i].dropdown.length > 0) {
                 console.log("Opening options modal for product:", that.productList[i].name);
                 that.selectedProductForOptions = that.productList[i];
                 that.selectedOption = null;
                 that.showOptionsModal = true;
+                console.log("Modal state set to:", that.showOptionsModal);
                 that.productLoading = false;
                 that.productLoadingId = "";
                 if (revertFilter.length > 0) {
@@ -911,13 +913,13 @@ var appCoding = new Vue({
                   toastr.warning("Please select option from dropdown!");
                 }
               } else {
-                // Check if product has dropdown options that need selection
                 console.log("Path 2 - Checking product for dropdown:", that.productList[i].name, "has dropdown:", !!that.productList[i].dropdown);
                 if (that.productList[i].dropdown && that.productList[i].dropdown.length > 0) {
                   console.log("Path 2 - Opening options modal for product:", that.productList[i].name);
                   that.selectedProductForOptions = that.productList[i];
                   that.selectedOption = null;
                   that.showOptionsModal = true;
+                  console.log("Path 2 - Modal state set to:", that.showOptionsModal);
                   that.productLoading = false;
                   that.productLoadingId = "";
                   if (revertFilter.length > 0) {
@@ -1896,7 +1898,6 @@ var appCoding = new Vue({
       toastr.success("Product removed from cart.");
     },
 
-    // Options Modal Methods
     closeOptionsModal: function() {
       this.showOptionsModal = false;
       this.selectedProductForOptions = null;
@@ -1917,7 +1918,6 @@ var appCoding = new Vue({
       var product = this.selectedProductForOptions;
       var option = this.selectedOption;
       
-      // Calculate final price including option price
       var finalPrice = product.price + (option.price || 0);
       
       let cable = 0;
@@ -1925,7 +1925,6 @@ var appCoding = new Vue({
         cable = 1;
       }
 
-      // Add to cart with selected option
       that.cartProducts.push({
         productId: option.shopId || product.id,
         variantId: option.shopId || product.id,
@@ -1943,7 +1942,6 @@ var appCoding = new Vue({
 
       that.cartTotal = that.cartTotal + finalPrice;
       
-      // Mark product as selected
       for (var i = 0; i < that.productList.length; i++) {
         if (that.productList[i].id === product.id) {
           that.productList[i].selected = true;
@@ -1951,7 +1949,6 @@ var appCoding = new Vue({
         }
       }
 
-      // Close modal
       that.closeOptionsModal();
       
       toastr.success("Product added to <b><u>cart</u></b>.", "", {
@@ -1963,18 +1960,15 @@ var appCoding = new Vue({
     },
 
     getOptionImage: function(option) {
-      // Return pin images based on option index or name
       if (option.name.toLowerCase().includes("usb-c") || option.name.toLowerCase().includes("type c")) {
         return "assets/img/pin-2.png";
       } else if (option.name.toLowerCase().includes("usb-a") || option.name.toLowerCase().includes("type a")) {
         return "assets/img/pin-1.png";
       }
-      // Default to pin-1.png for first option, pin-2.png for second option
       return "assets/img/pin-1.png";
     },
 
     getConnectorImage: function(option) {
-      // Return connector-specific image based on option name
       if (option.name.toLowerCase().includes("usb-c") || option.name.toLowerCase().includes("type c")) {
         return "assets/img/pin-2.png";
       } else if (option.name.toLowerCase().includes("usb-a") || option.name.toLowerCase().includes("type a")) {
@@ -1986,6 +1980,20 @@ var appCoding = new Vue({
     formatPrice: function(price) {
       if (!price) return "0.00";
       return (price / 100).toFixed(2);
+    },
+
+    testOptionsModal: function() {
+      console.log("Testing options modal...");
+      this.showOptionsModal = true;
+      this.selectedProductForOptions = {
+        id: "test",
+        name: "Test Product",
+        dropdown: [
+          { id: "option1", name: "Option 1", price: 0 },
+          { id: "option2", name: "Option 2", price: 0 }
+        ]
+      };
+      console.log("Modal should be visible now. showOptionsModal:", this.showOptionsModal);
     },
   },
   watch: {},
